@@ -9,7 +9,13 @@
  */
 
 
-/* Includes */
+/* -- Includes -- */
+/* Libraries */
+#include <StandardCplusplus.h>
+#include <system_configuration.h>
+#include <unwind-cxx.h>
+#include <utility.h>
+/* Local Includes */
 #include "presetScreens.h"
 #include "chars.h"
 
@@ -50,6 +56,7 @@ void setup() {
   pinMode(clockPin, OUTPUT);
 }
 
+
 /**
 * @brief loop function
 * Runs repeatedly forever, this is the main hub of the program.
@@ -57,9 +64,11 @@ void setup() {
 * @return should not return
 */
 void loop() {  
-  dispScreen(happy);
-  //flashScreen(OwO, 120);
+  //dispScreen(all);
+  //flashScreen(happy, 120);
+  createScreen(LESSTHAN,UNDERSCORE,LESSTHAN);
 }
+
 
 /**
 * @brief Display Screen Function
@@ -96,6 +105,7 @@ void dispScreen(byte dispArray[8][3]){
 
 }
 
+
 /**
 * @brief Flash Screen function
 * Pulses an image on the LED matrix at a user specified frequency in Hz.
@@ -103,7 +113,6 @@ void dispScreen(byte dispArray[8][3]){
 * @return Does not reutrn in code, but should produce a flashing result on LED Matrix
 * @bugs Accuracy of input is lost above 30Hz
 */
-/* Loses accuracy above about 30Hz */
 void flashScreen(byte dispArray[8][3], float delayFreq){
   /* Calculate the required delay time in milliseconds */
   int delayTime = (1/delayFreq)*1000/2;
@@ -122,11 +131,50 @@ void flashScreen(byte dispArray[8][3], float delayFreq){
 
 
 /**
+* @brief Scroll Screen Function
+* Scrolls any array of 8 columns.
+* 
+* @return Does not reutrn in code, but should produce a scrolling effect on the LED Matrix
+* @bugs Not yet implemented
+*/
+void scrollScreen(){
+  
+}
+
+
+/**
+* @brief Create Screen Function
+* Combines 3 chars as defined in chars.h and chars.cpp to produce a full screen made
+* up the 3 chars in sequence.
+* 
+* @return should not return, but produces a screen made up of the three characters passed
+* @bugs Not yet implemented
+*/
+void createScreen(byte char1[8], byte char2[8], byte char3[8]){
+  byte screen[8][3];
+  /* Create the 8x3 matrix of bytes */
+  for(int i=0; i<=7; i++){
+    for(int j=0; j<=2; j++){
+      if(j==0){
+        screen[i][j] = char3[i]; 
+      }else if(j==1){
+        screen[i][j] = char2[i]; 
+      }else if(j==2){
+        screen[i][j] = char1[i];
+      }
+    }
+  }
+  /* Display end product */
+  dispScreen(screen);
+}
+
+
+/**
 * @brief Quick Shift Out function
 * Optimised version of shiftout, loses general cases but is much quicker (~100uS for 3 bytes
 * compared to ~470uS in shiftOut()).
 * 
-* This function assumes all pins are on PORTB (pins 8 to 13) and that the MSB will be passed first.
+* This function assumes all pins are on PORTB (pins 8 to 13) and that the LSB will be passed first.
 * 
 * @return should not return, but shifts values into shift registers.
 */
@@ -134,7 +182,7 @@ void shiftOutQuick(int dataPinVal, int clockPinVal, byte val){
   /* Clear Data Pin*/
   bitClear(PORTB, dataPinPORTB);
   
-  for(int i=7; i >= 0; i--){
+  for(int i=0; i <= 7; i++){
     /* Set bits based on input value */
     if(bitRead(val, i) == 1){
       bitSet(PORTB, dataPinVal);   // Write 1
