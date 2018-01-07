@@ -5,6 +5,8 @@
  * @brief Produces values for whole screens of data
  *
  * Populates preset screens for the matrix as defined in presetScreens.h
+ * 
+ * @TODO: Move arrays to program memory
  */
 
 #include "presetScreens.h"

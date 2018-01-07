@@ -37,10 +37,10 @@ EELAYER END
 $Descr User 18701 10630
 encoding utf-8
 Sheet 1 1
-Title ""
-Date ""
-Rev ""
-Comp ""
+Title "LED Matrix"
+Date "2018-01-05"
+Rev "3"
+Comp "Kelly Lynch"
 Comment1 ""
 Comment2 ""
 Comment3 ""
